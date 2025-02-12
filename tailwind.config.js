@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,23 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: '#2563EB', // Change this to your brand's primary color
-          light: '#3B82F6',
-          dark: '#1D4ED8',
+        primary: '#024D5E',
+        accent: '#C18721',
+        cta: "#C18721",
+        neutral: {
+          50: "#F9FAFB",
+          100: "#F3F4F6",
+          200: "#E5E7EB",
+          300: "#D1D5DB",
+          400: "#9CA3AF",
+          500: "#6B7280",
+          600: "#4B5563",
+          700: "#374151",
+          800: "#1F2937",
+          900: "#111827",
         },
-        secondary: {
-          DEFAULT: '#10B981', // Change this to your brand's secondary color
-          light: '#34D399',
-          dark: '#059669',
-        },
-        accent: {
-          DEFAULT: '#F59E0B', // Change this to your brand's accent color
-          light: '#FBBF24',
-          dark: '#D97706',
-        }
       },
     },
   },
-  plugins: [],
-} 
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+}; 

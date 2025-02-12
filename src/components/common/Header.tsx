@@ -1,61 +1,44 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Button from './button'
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Courses', href: '/courses' },
-  { name: 'About', href: '/about' },
-  { name: 'Blogs', href: '/blogs' },
-  { name: 'Contact', href: '/contact' },
-]
-
-export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+const Header = () => {
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Programs', path: '/programs' },
+    { name: 'Resources', path: '/resources' },
+    { name: 'Blog', path: '/blog' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' }
+  ]
 
   return (
-    <header className="bg-white">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="text-2xl font-bold text-primary">Your Logo</span>
-          </Link>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
+    <header className="w-full py-4 px-6 bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold text-primary">
+          Logo
+        </Link>
+
+        {/* Navigation */}
+        <nav className="hidden md:flex items-center space-x-8">
+          {navLinks.map((link) => (
             <Link
-              key={item.name}
-              to={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:text-primary"
+              key={link.name}
+              to={link.path}
+              className="text-gray-700 hover:text-primary transition-colors"
             >
-              {item.name}
+              {link.name}
             </Link>
           ))}
-        </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <button
-            className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark"
-            onClick={() => {/* Open signup modal */}}
-          >
-            Sign Up
-          </button>
-        </div>
-      </nav>
-      
-      {/* Mobile menu */}
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-        {/* Add mobile menu implementation */}
-      </Dialog>
+        </nav>
+
+        {/* Sign Up Button */}
+        <Button variant="primary">
+          Sign Up
+        </Button>
+      </div>
     </header>
   )
-} 
+}
+
+export default Header 
