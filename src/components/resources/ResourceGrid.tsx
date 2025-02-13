@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import Button from '../common/button'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { useNavigate } from 'react-router-dom'
 // import 'swiper/css'
 interface Resource {
   id: string
@@ -10,6 +11,7 @@ interface Resource {
   image: string
   price: number
   category: string
+  features?: string[]
 }
 
 const resources: Resource[] = [
@@ -67,6 +69,7 @@ const resources: Resource[] = [
 const ResourceGrid = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const categories = [...new Set(resources.map(resource => resource.category))]
 
@@ -112,17 +115,31 @@ const ResourceGrid = () => {
         </p>
         <div className="flex justify-between items-center">
           <span className="text-lg font-semibold">${resource.price}</span>
-          <Button variant="primary" onClick={() => handleAddToCart(resource)}>
-            Add to Cart
+          <Button
+            variant="primary"
+            onClick={() => handlePurchaseClick(resource)}
+          >
+            Purchase Now
           </Button>
         </div>
       </div>
     </div>
   )
 
-  const handleAddToCart = (resource: Resource) => {
-    // Implement cart functionality
-    console.log('Added to cart:', resource)
+  const handlePurchaseClick = (resource: Resource) => {
+    navigate(`/checkout/resource/${resource.id}`, {
+      state: {
+        item: {
+          id: resource.id,
+          type: 'resource',
+          name: resource.title,
+          description: resource.description,
+          price: resource.price,
+          features: resource.features,
+          image: resource.image
+        }
+      }
+    })
   }
 
   return (

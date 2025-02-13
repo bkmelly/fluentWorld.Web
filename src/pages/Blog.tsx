@@ -1,8 +1,22 @@
-import { useState } from 'react'
+import { useState, Suspense, lazy } from 'react'
 // import Hero from '../components/home/hero'
 import BlogCategories from '../components/blog/BlogCategories'
-import FeaturedPost from '../components/blog/FeaturedPost'
-import BlogGrid from '../components/blog/BlogGrid'
+
+// Lazy load components
+const FeaturedPost = lazy(() => import('../components/blog/FeaturedPost'))
+const BlogGrid = lazy(() => import('../components/blog/BlogGrid'))
+
+// Loading placeholder
+const ContentLoader = () => (
+  <div className="animate-pulse space-y-4">
+    <div className="h-64 bg-gray-200 rounded-lg"></div>
+    <div className="grid md:grid-cols-3 gap-8">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="h-48 bg-gray-200 rounded-lg"></div>
+      ))}
+    </div>
+  </div>
+)
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -63,7 +77,9 @@ const Blog = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-8">
             Featured Article
           </h2>
-          <FeaturedPost />
+          <Suspense fallback={<ContentLoader />}>
+            <FeaturedPost />
+          </Suspense>
         </div>
       </section>
 
@@ -83,7 +99,9 @@ const Blog = () => {
               </select>
             </div>
           </div>
-          <BlogGrid category={selectedCategory} />
+          <Suspense fallback={<ContentLoader />}>
+            <BlogGrid category={selectedCategory} />
+          </Suspense>
         </div>
       </section>
 

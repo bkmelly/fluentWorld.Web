@@ -1,6 +1,30 @@
 import Button from '../common/button'
+import { useNavigate } from 'react-router-dom'
 
 const CommunitySection = () => {
+  const navigate = useNavigate()
+
+  const handleJoinClick = () => {
+    navigate(`/checkout/membership/community`, {
+      state: {
+        item: {
+          id: 'community',
+          type: 'membership',
+          name: 'Community Membership',
+          description: 'Join our thriving community of learners',
+          price: 99,
+          duration: '1 year',
+          features: [
+            'Access to community forums',
+            'Monthly webinars',
+            'Networking events',
+            'Resource library'
+          ]
+        }
+      }
+    })
+  }
+
   return (
     <section className="py-16 px-6 bg-neutral-50">
       <div className="max-w-7xl mx-auto">
@@ -18,8 +42,11 @@ const CommunitySection = () => {
                 placeholder="Enter your email"
                 className="w-full sm:w-auto px-6 py-3 border rounded-lg"
               />
-              <Button variant="primary">
-                Join Community
+              <Button 
+                variant="primary"
+                onClick={handleJoinClick}
+              >
+                Join Our Community
               </Button>
             </div>
             <div className="flex items-center justify-center gap-4">

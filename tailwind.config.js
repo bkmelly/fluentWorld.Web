@@ -1,31 +1,31 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        primary: '#024D5E',
-        accent: '#C18721',
-        cta: "#C18721",
-        neutral: {
-          50: "#F9FAFB",
-          100: "#F3F4F6",
-          200: "#E5E7EB",
-          300: "#D1D5DB",
-          400: "#9CA3AF",
-          500: "#6B7280",
-          600: "#4B5563",
-          700: "#374151",
-          800: "#1F2937",
-          900: "#111827",
-        },
+        brand: {
+          primary: '#024D5E',
+          secondary: '#C18721',
+        }
       },
     },
   },
   plugins: [
     require('@tailwindcss/typography'),
   ],
+  safelist: [
+    'bg-[#024D5E]',
+    'bg-[#C18721]',
+    'text-[#024D5E]',
+    'text-[#C18721]',
+    'border-[#024D5E]',
+    'border-[#C18721]',
+    'hover:bg-[#024D5E]',
+    'hover:bg-[#C18721]',
+    'hover:text-[#024D5E]',
+    'hover:text-[#C18721]',
+  ]
 }; 

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { FiCheck, FiClock, FiBook, FiUsers } from 'react-icons/fi'
 import Button from '../components/common/button'
 import TestimonialSlider from '../components/programs/TestimonialSlider'
@@ -75,6 +75,24 @@ const pricingTiers: PricingTier[] = [
 
 const ProgramDetails = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
+
+  const handleEnrollClick = (tier: PricingTier) => {
+    navigate(`/checkout/program/${id}`, {
+      state: {
+        item: {
+          id,
+          type: 'program',
+          name: `Web Development Bootcamp - ${tier.name} Plan`,
+          description: tier.description,
+          price: parseInt(tier.price.replace('$', '')),
+          duration: '12 months',
+          features: tier.features,
+          image: '/path-to-program-image.jpg'
+        }
+      }
+    })
+  }
 
   return (
     <main className="bg-white">
@@ -101,7 +119,11 @@ const ProgramDetails = () => {
                 Master modern web development from scratch. Learn by building real projects with expert guidance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="secondary" className="bg-white text-primary hover:bg-white/90">
+                <Button 
+                  variant="secondary" 
+                  className="bg-white text-primary hover:bg-white/90"
+                  onClick={() => handleEnrollClick(pricingTiers[1])}
+                >
                   Enroll Now
                 </Button>
                 <Button variant="secondary" className="border-2 border-white bg-transparent text-white hover:bg-white/10">
@@ -197,6 +219,7 @@ const ProgramDetails = () => {
                 <Button 
                   variant={tier.recommended ? 'primary' : 'secondary'}
                   className="w-full"
+                  onClick={() => handleEnrollClick(tier)}
                 >
                   Get Started
                 </Button>
@@ -246,7 +269,11 @@ const ProgramDetails = () => {
             Join hundreds of successful graduates who have transformed their careers
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="secondary" className="bg-white text-primary hover:bg-white/90">
+            <Button 
+              variant="secondary" 
+              className="bg-white text-primary hover:bg-white/90"
+              onClick={() => handleEnrollClick(pricingTiers[1])}
+            >
               Enroll Now
             </Button>
             <Button variant="secondary" className="border-2 border-white bg-transparent text-white hover:bg-white/10">

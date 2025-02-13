@@ -16,11 +16,11 @@ const programs: Program[] = [
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
-    duration: '12 weeks',
+    duration: '12 weeks', 
     level: 'Beginner'
   },
   {
-    id: '1',
+    id: '2',
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
@@ -28,7 +28,7 @@ const programs: Program[] = [
     level: 'Beginner'
   },
   {
-    id: '1',
+    id: '3',
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
@@ -36,7 +36,7 @@ const programs: Program[] = [
     level: 'Beginner'
   },
   {
-    id: '1',
+    id: '4',
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
@@ -44,7 +44,7 @@ const programs: Program[] = [
     level: 'Beginner'
   },
   {
-    id: '1',
+    id: '5',
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
@@ -52,7 +52,7 @@ const programs: Program[] = [
     level: 'Beginner'
   },
   {
-    id: '1',
+    id: '6',
     title: 'Web Development',
     description: 'Learn modern web development from scratch',
     image: '/path-to-image.jpg',
