@@ -94,7 +94,7 @@ const ProgramGrid = () => {
                   to={`/programs/${program.id}`}
                   className="block w-full"
                 >
-                  <Button variant="secondary" className="w-full">
+                  <Button variant="primary" className="w-full">
                     Learn More
                   </Button>
                 </Link>

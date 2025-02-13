@@ -11,12 +11,12 @@ const Footer = () => {
   ]
 
   return (
-    <footer className="bg-[#024D5E]/5 border-t">
+    <footer className="bg-[#024D5E]/5">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Community Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-[#024D5E]">
+            <h3 className="text-2xl font-bold text-brand-primary">
               Join Our Online Student Community
             </h3>
             <div className="flex gap-2">
@@ -42,13 +42,13 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-[#024D5E]">Quick Links</h4>
+            <h4 className="font-semibold text-brand-primary">Quick Links</h4>
             <ul className="space-y-2">
               {['Programs', 'About Us', 'Contact', 'Shop'].map((item) => (
                 <li key={item}>
                   <Link 
                     to={`/${item.toLowerCase().replace(' ', '-')}`} 
-                    className="text-gray-600 hover:text-[#024D5E] transition-colors"
+                    className="text-gray-600 hover:text-brand-primary transition-colors"
                   >
                     {item}
                   </Link>
@@ -82,7 +82,7 @@ const Footer = () => {
                 <a
                   key={link.name}
                   href={link.url}
-                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-[#024D5E] hover:text-white hover:border-transparent transition-all duration-200"
+                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-brand-primary hover:text-white hover:border-transparent transition-all duration-200"
                   aria-label={link.name}
                 >
                   <link.icon className="w-5 h-5" />

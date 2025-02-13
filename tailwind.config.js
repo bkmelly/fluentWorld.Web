@@ -6,10 +6,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          primary: '#024D5E',
-          secondary: '#C18721',
-        }
+        primary: '#024D5E',
+        secondary: '#C18721',
+        'primary-light': '#E6EEF0',
+        'primary-dark': '#023E4B',
+        'secondary-light': '#FCF4E6',
+        'secondary-dark': '#9A6C1A',
+      },
+      animation: {
+        'ripple': 'ripple 1s cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      keyframes: {
+        ripple: {
+          '0%': { transform: 'scale(0)', opacity: '0.5' },
+          '100%': { transform: 'scale(4)', opacity: '0' },
+        },
       },
     },
   },
@@ -17,15 +28,14 @@ module.exports = {
     require('@tailwindcss/typography'),
   ],
   safelist: [
-    'bg-[#024D5E]',
-    'bg-[#C18721]',
-    'text-[#024D5E]',
-    'text-[#C18721]',
-    'border-[#024D5E]',
-    'border-[#C18721]',
-    'hover:bg-[#024D5E]',
-    'hover:bg-[#C18721]',
-    'hover:text-[#024D5E]',
-    'hover:text-[#C18721]',
+    'bg-primary',
+    'text-primary',
+    'border-primary',
+    'bg-secondary',
+    'text-secondary',
+    'border-secondary',
+    {
+      pattern: /(bg|text|border)-(primary|secondary)-(50|100|200|300|400|500|600|700|800|900)/,
+    },
   ]
 }; 

@@ -1,6 +1,7 @@
 import { useState, Suspense, lazy } from 'react'
 // import Hero from '../components/home/hero'
 import BlogCategories from '../components/blog/BlogCategories'
+import CommunitySection from '../components/resources/CommunitySection'
 
 // Lazy load components
 const FeaturedPost = lazy(() => import('../components/blog/FeaturedPost'))
@@ -104,28 +105,8 @@ const Blog = () => {
           </Suspense>
         </div>
       </section>
-
-      {/* Newsletter Section */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Subscribe to Our Newsletter
-          </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Get the latest articles and insights delivered straight to your inbox.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="px-6 py-3 border rounded-lg w-full sm:w-96 focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
-            <button className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
+ {/* Community Section */}
+ <CommunitySection />
     </main>
   )
 }

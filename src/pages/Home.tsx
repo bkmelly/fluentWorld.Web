@@ -1,13 +1,16 @@
 import { Suspense, lazy, useEffect } from 'react'
-import { useLoadingState } from '../hooks/useLoadingState'
 import Hero from '../components/home/hero'
-import LoadingBoundary from '../components/common/LoadingBoundary'
+import StatsSection from '../components/home/StatsSection'
+import WhyChooseUs from '../components/home/WhyChooseUs'
+import LearningProcess from '../components/home/LearningProcess'
+import TechnologyStack from '../components/home/TechnologyStack'
+import StudentSuccess from '../components/home/StudentSuccess'
+import TeamSection from '../components/home/TeamSection'
+import ErrorBoundary from '../components/common/ErrorBoundary'
 
-// Lazy load non-critical components
+// Lazy load components
 const Programs = lazy(() => import('../components/home/Programs'))
-const AboutPrograms = lazy(() => import('../components/home/AboutPrograms'))
 const Testimonials = lazy(() => import('../components/home/testimonials'))
-const BlogIntro = lazy(() => import('../components/home/BlogIntro'))
 const BlogSection = lazy(() => import('../components/home/BlogSection'))
 const CTASection = lazy(() => import('../components/home/CTASection'))
 
@@ -29,47 +32,48 @@ const SectionLoader = () => (
 )
 
 const Home = () => {
-  const isLoading = useLoadingState()
-
+  // Preload components when Home mounts
   useEffect(() => {
-    // Set page title
-    document.title = isLoading ? 'Loading... | Site Name' : 'Home | Site Name'
-  }, [isLoading])
+    const preloadComponents = async () => {
+      const components = [
+        import('../components/home/Programs'),
+        import('../components/home/testimonials'),
+        import('../components/home/BlogSection'),
+        import('../components/home/CTASection')
+      ]
+      await Promise.all(components)
+    }
+    preloadComponents()
+  }, [])
 
   return (
     <main>
-      {/* Keep Hero non-lazy as it's above the fold */}
-      <Hero 
-        title="Educational Resources"
-        description="Browse through our collection of learning materials, tools, and resources"
-        ctaText="Browse Resources"
-        scrollTo="resources"
-        image="/path-to-your-hero-image.jpg"
-      />
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <Programs />
-      </LoadingBoundary>
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <AboutPrograms />
-      </LoadingBoundary>
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <Testimonials />
-      </LoadingBoundary>
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <BlogIntro />
-      </LoadingBoundary>
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <BlogSection />
-      </LoadingBoundary>
-      
-      <LoadingBoundary fallback={<SectionLoader />}>
-        <CTASection />
-      </LoadingBoundary>
+      <ErrorBoundary>
+        <Hero 
+          title="Transform Your Future with Expert-Led Education"
+          description="Access world-class learning programs designed to help you succeed in today's digital world. Learn from industry experts and join our global community of learners."
+          ctaText="Explore Programs"
+          scrollTo="programs"
+        />
+        
+        <StatsSection />
+        
+        <Suspense fallback={<SectionLoader />}>
+          <ErrorBoundary>
+            <div>
+              <Programs />
+              <WhyChooseUs />
+              <TechnologyStack />
+              <LearningProcess />
+              <StudentSuccess />
+              <Testimonials />
+              <TeamSection />
+              <BlogSection />
+              <CTASection />
+            </div>
+          </ErrorBoundary>
+        </Suspense>
+      </ErrorBoundary>
     </main>
   )
 }

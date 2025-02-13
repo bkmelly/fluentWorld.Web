@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 interface Testimonial {
   id: string
   name: string
   role: string
+  company: string
   content: string
   avatar: string
   rating: number
@@ -19,11 +21,29 @@ const testimonials: Testimonial[] = [
     id: '1',
     name: 'Sarah Johnson',
     role: 'Web Development Student',
-    content: 'The program exceeded my expectations. The instructors are fantastic and the content is up-to-date.',
+    company: 'Google',
+    content: 'The program exceeded my expectations. The instructors are fantastic and the content is up-to-date with modern industry practices.',
     avatar: '/path-to-avatar.jpg',
     rating: 5
   },
-  // Add more testimonials...
+  {
+    id: '2',
+    name: 'Michael Chen',
+    role: 'Data Science Graduate',
+    company: 'Microsoft',
+    content: 'This course transformed my career. The hands-on projects and mentorship were invaluable in helping me land my dream job.',
+    avatar: '/path-to-avatar.jpg',
+    rating: 5
+  },
+  {
+    id: '3',
+    name: 'Emily Rodriguez',
+    role: 'UX Design Student',
+    company: 'Adobe',
+    content: 'The community support and real-world projects made learning engaging and practical. Highly recommend to anyone looking to switch careers.',
+    avatar: '/path-to-avatar.jpg',
+    rating: 5
+  }
 ]
 
 const faqs: FAQ[] = [
@@ -55,58 +75,111 @@ const faqs: FAQ[] = [
 ]
 
 const Testimonials = () => {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [openFAQ, setOpenFAQ] = useState<string | null>(null)
 
+  const next = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prev = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
   return (
-    <section className="py-16 px-6 bg-white">
+    <section className="py-24 px-6 bg-[#024D5E]/5">
       <div className="max-w-7xl mx-auto">
-        {/* Testimonials */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             What Our Students Say
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
-              <div 
-                key={testimonial.id}
-                className="bg-neutral-50 p-6 rounded-lg space-y-4"
-              >
-                {/* Rating */}
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-5 h-5 ${
-                        i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
-                      }`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                <p className="text-gray-600">{testimonial.content}</p>
-                
-                <div className="flex items-center gap-4">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <h4 className="font-semibold">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Hear from our graduates who have transformed their careers through our programs
+          </p>
+        </div>
+
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div 
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {testimonials.map((testimonial) => (
+                <div 
+                  key={testimonial.id}
+                  className="w-full flex-shrink-0 px-4"
+                >
+                  <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg">
+                    <div className="flex flex-col md:flex-row gap-8 items-center">
+                      <div className="w-24 h-24 md:w-32 md:h-32">
+                        <img
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                          className="w-full h-full rounded-full object-cover border-4 border-[#024D5E]/10"
+                        />
+                      </div>
+                      <div className="flex-1 text-center md:text-left">
+                        <div className="flex justify-center md:justify-start mb-4">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <span key={i} className="text-[#C18721]">★</span>
+                          ))}
+                        </div>
+                        <blockquote className="text-xl md:text-2xl text-gray-900 italic mb-6">
+                          "{testimonial.content}"
+                        </blockquote>
+                        <div>
+                          <div className="font-semibold text-[#024D5E]">
+                            {testimonial.name}
+                          </div>
+                          <div className="text-gray-600">
+                            {testimonial.role} at {testimonial.company}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-8 
+                       w-12 h-12 rounded-full bg-white shadow-lg hover:bg-gray-50 
+                       flex items-center justify-center transition-transform
+                       hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#024D5E]/20"
+          >
+            <FiChevronLeft className="w-6 h-6 text-[#024D5E]" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-8 
+                       w-12 h-12 rounded-full bg-white shadow-lg hover:bg-gray-50 
+                       flex items-center justify-center transition-transform
+                       hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#024D5E]/20"
+          >
+            <FiChevronRight className="w-6 h-6 text-[#024D5E]" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 
+                           ${currentIndex === index 
+                             ? 'bg-[#024D5E] w-8' 
+                             : 'bg-[#024D5E]/20 hover:bg-[#024D5E]/40'}`}
+              />
             ))}
           </div>
         </div>
 
         {/* FAQ Section */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto mt-16">
           <h2 className="text-3xl font-bold text-center mb-8">
             Frequently Asked Questions
           </h2>

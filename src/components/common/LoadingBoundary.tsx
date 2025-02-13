@@ -6,7 +6,7 @@ interface LoadingBoundaryProps {
   timeout?: number
 }
 
-const LoadingBoundary = ({ children, fallback, timeout = 10000 }: LoadingBoundaryProps) => {
+const LoadingBoundary = ({ children, fallback, timeout = 30000 }: LoadingBoundaryProps) => {
   const [showTimeout, setShowTimeout] = useState(false)
 
   useEffect(() => {
@@ -18,7 +18,17 @@ const LoadingBoundary = ({ children, fallback, timeout = 10000 }: LoadingBoundar
   }, [timeout])
 
   if (showTimeout) {
-    return <div className="text-center py-4">Content taking too long to load. Please refresh the page.</div>
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Content is taking longer than expected to load.</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-4 text-primary hover:text-primary-dark underline"
+        >
+          Refresh Page
+        </button>
+      </div>
+    )
   }
 
   return <Suspense fallback={fallback}>{children}</Suspense>

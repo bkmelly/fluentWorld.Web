@@ -226,27 +226,7 @@ const About = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-24 bg-primary">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Ready to Start Your Learning Journey?
-          </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Join our community of learners and take the first step towards your future.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="secondary" className="bg-white text-primary hover:bg-white/90">
-              Browse Programs
-            </Button>
-            <Button variant="secondary" className="border-2 border-white bg-transparent text-white hover:bg-white/10">
-              Contact Us
-            </Button>
-          </div>
-        </div>
-      </section>
-
+      
       {/* Community Section */}
       <CommunitySection />
     </main>
