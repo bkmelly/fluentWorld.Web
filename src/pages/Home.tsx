@@ -3,7 +3,7 @@ import Hero from '../components/home/hero'
 import StatsSection from '../components/home/StatsSection'
 import WhyChooseUs from '../components/home/WhyChooseUs'
 import LearningProcess from '../components/home/LearningProcess'
-import TechnologyStack from '../components/home/TechnologyStack'
+import LanguageSkills from '../components/home/LanguageSkills'
 import StudentSuccess from '../components/home/StudentSuccess'
 import TeamSection from '../components/home/TeamSection'
 import ErrorBoundary from '../components/common/ErrorBoundary'
@@ -63,10 +63,10 @@ const Home = () => {
             <div>
               <Programs />
               <WhyChooseUs />
-              <TechnologyStack />
+              <LanguageSkills />
               <LearningProcess />
-              <StudentSuccess />
               <Testimonials />
+              <StudentSuccess />
               <TeamSection />
               <BlogSection />
               <CTASection />

@@ -11,7 +11,7 @@ const CTASection = () => {
           Join thousands of students who have already transformed their careers through our programs.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="primary" className="bg-white text-[#024D5E] hover:bg-white/90">
+          <Button variant="secondary" className="bg-[#C18721] text-[#024D5E] hover:bg-white/10">
             Get Started Today
           </Button>
           <Button variant="outline" className="border-white text-white hover:bg-white/10">

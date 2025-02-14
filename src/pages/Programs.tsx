@@ -1,8 +1,8 @@
 import ProgramGrid from '../components/programs/ProgramGrid'
 import FAQSection from '../components/programs/FAQSection'
-import BenefitsTimeline from '../components/programs/BenefitsTimeline'
-import TeamSection from '../components/programs/TeamSection'
-import WhyChooseUs from '../components/home/AboutPrograms'
+import TeamSection from '../components/home/TeamSection'
+import WhyChooseUs from '../components/home/WhyChooseUs'
+import StudentSuccess from '../components/home/StudentSuccess'
 
 const Programs = () => {
   return (
@@ -19,9 +19,10 @@ const Programs = () => {
       </div>
       <ProgramGrid />
       <FAQSection />
-      <BenefitsTimeline />
-      <TeamSection />
       <WhyChooseUs />
+      <StudentSuccess />
+      <TeamSection />
+     
     </main>
   )
 }

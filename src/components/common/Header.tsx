@@ -1,58 +1,117 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
 import Button from './button'
+import { FiMenu, FiX } from 'react-icons/fi'
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
+
+  const isActive = (path: string) => {
+    return location.pathname === path
+  }
+
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Programs', path: '/programs' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' }
+    { path: '/', label: 'Home' },
+    { path: '/programs', label: 'Programs' },
+    { path: '/about', label: 'About' },
+    { path: '/blog', label: 'Blog' },
+    { path: '/contact', label: 'Contact' }
   ]
 
   return (
-    <header className="w-full py-4 px-6 bg-[#024D5E]/5 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-primary">
-          Logo
-        </Link>
+    <header className="fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold text-[#024D5E]">
+            Logo
+          </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className={`
-                relative py-2 text-sm font-medium transition-all duration-300
-                hover:text-primary group
-                ${location.pathname === link.path 
-                  ? 'text-primary' 
-                  : 'text-gray-600'}
-              `}
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map(link => (
+              <Link 
+                key={link.path}
+                to={link.path} 
+                className={`text-[#024D5E] font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#C18721] after:transition-all after:duration-300
+                  ${isActive(link.path) ? 'after:w-full' : 'after:w-0 hover:after:w-full'}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            <Button variant="primary">
+              Get Started
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="p-2 text-[#024D5E] md:hidden"
+          >
+            <FiMenu className="w-6 h-6" />
+          </button>
+
+          {/* Mobile Sidebar */}
+          <div 
+            className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity md:hidden ${
+              isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {/* Sidebar Content */}
+            <div 
+              className={`fixed inset-y-0 right-0 w-[280px] bg-[#024D5E] p-6 transition-transform duration-300 ease-in-out transform ${
+                isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
+              onClick={e => e.stopPropagation()}
             >
-              {link.name}
-              <span className={`
-                absolute bottom-0 left-0 w-0 h-0.5 bg-primary 
-                transition-all duration-300 ease-out
-                group-hover:w-full
-                ${location.pathname === link.path ? 'w-full' : ''}
-              `} />
-            </Link>
-          ))}
-        </nav>
+              {/* Close Button */}
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="absolute top-6 right-6 text-white"
+              >
+                <FiX className="w-6 h-6" />
+              </button>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4">
-          <Button variant="outline">
-            Sign In
-          </Button>
-          <Button variant="primary">
-            Sign Up
-          </Button>
+              {/* Mobile Navigation Links */}
+              <nav className="mt-16 flex flex-col gap-4">
+                {navLinks.map(link => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`text-white/80 text-lg font-medium py-2 hover:text-white transition-colors ${
+                      isActive(link.path) ? 'text-white' : ''
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Mobile CTA - Styled like footer card */}
+              <div className="absolute bottom-8 left-6 right-6 bg-white/5 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Ready to Start?
+                </h3>
+                <p className="text-white/80 text-sm mb-4">
+                  Begin your language learning journey today.
+                </p>
+                <Button 
+                  variant="secondary"
+                  className="w-full bg-[#C18721] hover:bg-[#C18721]/90"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

@@ -7,7 +7,6 @@ import { useLoadingState } from './hooks/useLoadingState'
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'))
 const Programs = lazy(() => import('./pages/Programs'))
-const Resources = lazy(() => import('./pages/Resources'))
 const Blog = lazy(() => import('./pages/Blog'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
 const About = lazy(() => import('./pages/About'))
@@ -15,6 +14,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const ProgramDetails = lazy(() => import('./pages/ProgramDetails'))
 const Checkout = lazy(() => import('./pages/Checkout'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
+const StudyMaterials = lazy(() => import('./pages/StudyMaterials'))
 
 // Loading placeholder
 const PageLoader = () => (
@@ -48,7 +48,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/programs" element={<Programs />} />
               <Route path="/programs/:id" element={<ProgramDetails />} />
-              <Route path="/resources" element={<Resources />} />
+              <Route path="/study-materials" element={<StudyMaterials />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<Blog />} />
