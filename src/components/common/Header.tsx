@@ -2,9 +2,14 @@ import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import Button from './button'
 import { FiMenu, FiX } from 'react-icons/fi'
+import AuthModal from '../auth/AuthModal'
+import UserMenu from '../auth/UserMenu'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const { currentUser } = useAuth()
   const location = useLocation()
 
   const isActive = (path: string) => {
@@ -44,9 +49,16 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="primary">
-              Get Started
-            </Button>
+            {currentUser ? (
+              <UserMenu />
+            ) : (
+              <Button 
+                variant="primary"
+                onClick={() => setIsAuthModalOpen(true)}
+              >
+                Get Started
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -114,6 +126,12 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
     </header>
   )
 }

@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Suspense, lazy, useEffect } from 'react'
+import { Suspense, lazy } from 'react'
 import Header from './components/common/header'
 import Footer from './components/common/footer'
 import { useLoadingState } from './hooks/useLoadingState'
+import { AuthProvider } from './contexts/AuthContext'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'))
@@ -15,6 +17,7 @@ const ProgramDetails = lazy(() => import('./pages/ProgramDetails'))
 const Checkout = lazy(() => import('./pages/Checkout'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const StudyMaterials = lazy(() => import('./pages/StudyMaterials'))
+const Profile = lazy(() => import('./pages/Profile'))
 
 // Loading placeholder
 const PageLoader = () => (
@@ -26,47 +29,54 @@ const PageLoader = () => (
   </div>
 )
 
-function App() {
+const App = () => {
   const isLoading = useLoadingState()
 
-  useEffect(() => {
-    // Remove loading indicator from title when components are loaded
-    if (!isLoading) {
-      document.title = document.title.replace(' - Loading...', '')
-    }
-  }, [isLoading])
+  if (isLoading) {
+    return <PageLoader />
+  }
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-grow">
-          <Suspense 
-            fallback={<PageLoader />}
-          >
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/programs" element={<Programs />} />
-              <Route path="/programs/:id" element={<ProgramDetails />} />
-              <Route path="/study-materials" element={<StudyMaterials />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:id" element={<BlogPost />} />
-              <Route path="/checkout/:type/:id" element={<Checkout />} />
-              <Route 
-                path="/admin/*" 
-                element={
-                  <div className="bg-gray-50 min-h-screen">
-                    <Dashboard />
-                  </div>
-                } 
-              />
-            </Routes>
-          </Suspense>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <div className="flex-grow pt-20">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/programs" element={<Programs />} />
+                <Route path="/programs/:id" element={<ProgramDetails />} />
+                <Route path="/study-materials" element={<StudyMaterials />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogPost />} />
+                <Route path="/checkout/:type/:id" element={<Checkout />} />
+                <Route 
+                  path="/admin/*" 
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <div className="bg-gray-50 min-h-screen">
+                        <Dashboard />
+                      </div>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </Suspense>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </AuthProvider>
     </Router>
   )
 }
