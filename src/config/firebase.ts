@@ -1,12 +1,14 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, connectAuthEmulator } from 'firebase/auth'
 import { 
-  getFirestore, 
+  // getFirestore, 
   connectFirestoreEmulator,
   enableIndexedDbPersistence,
   initializeFirestore,
-  persistentLocalCache,
-  persistentMultipleTabManager
+  CACHE_SIZE_UNLIMITED,
+  doc,
+  setDoc,
+  serverTimestamp
 } from 'firebase/firestore'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
 // import { getAnalytics } from 'firebase/analytics'
@@ -26,9 +28,8 @@ const app = initializeApp(firebaseConfig)
 
 // Initialize Firestore with settings
 const db = initializeFirestore(app, {
-  cache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager()
-  })
+  ignoreUndefinedProperties: true,
+  cacheSizeBytes: CACHE_SIZE_UNLIMITED
 })
 
 // Get Firebase services
@@ -59,6 +60,24 @@ if (USE_EMULATOR && import.meta.env.DEV) {
   } catch (error) {
     console.error('Error connecting to emulators:', error)
   }
+}
+
+// Set up presence tracking
+if (auth.currentUser) {
+  const uid = auth.currentUser.uid
+  const userStatusRef = doc(db, 'status', uid)
+
+  // Offline status
+  setDoc(userStatusRef, {
+    state: 'offline',
+    lastChanged: serverTimestamp()
+  })
+
+  // Online status
+  setDoc(userStatusRef, {
+    state: 'online',
+    lastChanged: serverTimestamp()
+  })
 }
 
 export { db }

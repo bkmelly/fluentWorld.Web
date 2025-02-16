@@ -5,6 +5,8 @@ import Footer from './components/common/footer'
 import { useLoadingState } from './hooks/useLoadingState'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import PersistentAuthModal from './components/auth/PersistentAuthModal'
+import { AdminProvider } from './contexts/AdminContext'
 
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'))
@@ -39,43 +41,46 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <div className="flex-grow pt-20">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/programs" element={<Programs />} />
-                <Route path="/programs/:id" element={<ProgramDetails />} />
-                <Route path="/study-materials" element={<StudyMaterials />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:id" element={<BlogPost />} />
-                <Route path="/checkout/:type/:id" element={<Checkout />} />
-                <Route 
-                  path="/admin/*" 
-                  element={
-                    <ProtectedRoute requireAdmin>
-                      <div className="bg-gray-50 min-h-screen">
-                        <Dashboard />
-                      </div>
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/profile" 
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  } 
-                />
-              </Routes>
-            </Suspense>
+        <AdminProvider>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <div className="flex-grow pt-20">
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/programs" element={<Programs />} />
+                  <Route path="/programs/:id" element={<ProgramDetails />} />
+                  <Route path="/study-materials" element={<StudyMaterials />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:id" element={<BlogPost />} />
+                  <Route path="/checkout/:type/:id" element={<Checkout />} />
+                  <Route 
+                    path="/admin/*" 
+                    element={
+                      <ProtectedRoute requireAdmin>
+                        <div className="bg-gray-50 min-h-screen">
+                          <Dashboard />
+                        </div>
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/profile" 
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    } 
+                  />
+                </Routes>
+              </Suspense>
+            </div>
+            <Footer />
+            <PersistentAuthModal />
           </div>
-          <Footer />
-        </div>
+        </AdminProvider>
       </AuthProvider>
     </Router>
   )
