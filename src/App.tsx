@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import PersistentAuthModal from './components/auth/PersistentAuthModal'
 import { AdminProvider } from './contexts/AdminContext'
+import EditBlogPost from './pages/admin/EditBlogPost'
 
 // Lazy load all pages
 const Home = lazy(() => import('./pages/Home'))
@@ -20,6 +21,7 @@ const Checkout = lazy(() => import('./pages/Checkout'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const StudyMaterials = lazy(() => import('./pages/StudyMaterials'))
 const Profile = lazy(() => import('./pages/Profile'))
+const BlogManagement = lazy(() => import('./pages/admin/BlogManagement'))
 
 // Loading placeholder
 const PageLoader = () => (
@@ -57,12 +59,18 @@ const App = () => {
                   <Route path="/blog/:id" element={<BlogPost />} />
                   <Route path="/checkout/:type/:id" element={<Checkout />} />
                   <Route 
-                    path="/admin/*" 
+                    path="/admin" 
                     element={
                       <ProtectedRoute requireAdmin>
-                        <div className="bg-gray-50 min-h-screen">
-                          <Dashboard />
-                        </div>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/blog" 
+                    element={
+                      <ProtectedRoute requireAdmin>
+                        <BlogManagement />
                       </ProtectedRoute>
                     } 
                   />
@@ -71,6 +79,14 @@ const App = () => {
                     element={
                       <ProtectedRoute>
                         <Profile />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/blog/:postId/edit" 
+                    element={
+                      <ProtectedRoute requireAdmin>
+                        <EditBlogPost />
                       </ProtectedRoute>
                     } 
                   />

@@ -8,16 +8,24 @@ const PersistentAuthModal = () => {
   const { currentUser } = useAuth()
   const location = useLocation()
   
-  // Show modal after 10 seconds if user is not logged in
   useEffect(() => {
     if (!currentUser && !sessionStorage.getItem('modalDismissed')) {
-      const timer = setTimeout(() => {
-        setShowModal(true)
-      }, 10000)
+      // Get or initialize page visit count
+      const visitCount = parseInt(sessionStorage.getItem('pageVisits') || '0')
       
-      return () => clearTimeout(timer)
+      // Increment visit count for new page
+      sessionStorage.setItem('pageVisits', (visitCount + 1).toString())
+
+      // Show modal after 30 seconds if user has visited multiple pages
+      if (visitCount >= 2) {
+        const timer = setTimeout(() => {
+          setShowModal(true)
+        }, 30000) // 30 seconds
+        
+        return () => clearTimeout(timer)
+      }
     }
-  }, [currentUser, location])
+  }, [currentUser, location.pathname]) // Track pathname changes
 
   const handleClose = () => {
     setShowModal(false)

@@ -1,7 +1,10 @@
-import { useState, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy, useEffect } from 'react'
 // import Hero from '../components/home/hero'
 import BlogCategories from '../components/blog/BlogCategories'
 import CommunitySection from '../components/resources/CommunitySection'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { db } from '../config/firebase'
+import type { BlogPost } from '../types/blog'
 
 // Lazy load components
 const FeaturedPost = lazy(() => import('../components/blog/FeaturedPost'))
@@ -21,6 +24,37 @@ const ContentLoader = () => (
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true)
+        const blogRef = collection(db, 'blogs')
+        const q = query(blogRef, orderBy('date', 'desc'))
+        const querySnapshot = await getDocs(q)
+        
+        const fetchedPosts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          date: doc.data().date?.toDate?.() || new Date(doc.data().date),
+        })) as BlogPost[]
+
+        setPosts(fetchedPosts)
+      } catch (error) {
+        console.error('Error fetching blog posts:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchPosts()
+  }, [])
+
+  const filteredPosts = selectedCategory
+    ? posts.filter(post => post.category === selectedCategory)
+    : posts
 
   return (
     <main className="min-h-screen bg-white">
@@ -79,7 +113,7 @@ const Blog = () => {
             Featured Article
           </h2>
           <Suspense fallback={<ContentLoader />}>
-            <FeaturedPost />
+            {posts.length > 0 && <FeaturedPost post={posts[0]} />}
           </Suspense>
         </div>
       </section>
@@ -101,12 +135,13 @@ const Blog = () => {
             </div>
           </div>
           <Suspense fallback={<ContentLoader />}>
-            <BlogGrid category={selectedCategory} />
+            <BlogGrid posts={filteredPosts.slice(1)} />
           </Suspense>
         </div>
       </section>
- {/* Community Section */}
- <CommunitySection />
+
+      {/* Community Section */}
+      <CommunitySection />
     </main>
   )
 }
