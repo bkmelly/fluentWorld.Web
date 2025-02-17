@@ -12,6 +12,13 @@ module.exports = {
         'primary-dark': '#023E4B',
         'secondary-light': '#FCF4E6',
         'secondary-dark': '#9A6C1A',
+        social: {
+          twitter: '#1DA1F2',
+          facebook: '#4267B2',
+          linkedin: '#0077B5',
+          instagram: '#E1306C',
+          youtube: '#FF0000'
+        }
       },
       animation: {
         'ripple': 'ripple 1s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -37,5 +44,10 @@ module.exports = {
     {
       pattern: /(bg|text|border)-(primary|secondary)-(50|100|200|300|400|500|600|700|800|900)/,
     },
+    'text-social-twitter',
+    'text-social-facebook',
+    'text-social-linkedin',
+    'text-social-instagram',
+    'text-social-youtube'
   ]
 }; 

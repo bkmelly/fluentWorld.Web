@@ -10,6 +10,7 @@ import RichTextEditor from '../../components/admin/RichTextEditor'
 import AIAssistant from '../../components/admin/AIAssistant'
 import FloatingToolbox from '../../components/admin/FloatingToolbox'
 import { FiCalendar, FiClock, FiTag, FiUser } from 'react-icons/fi'
+import FloatingSocials from '../../components/admin/FloatingSocials'
 
 type BlockType = 'heading1' | 'heading2' | 'paragraph' | 'image' | 'checklist' | 'quote'
 
@@ -131,6 +132,9 @@ const EditBlogPost = () => {
         </Button>
       </div>
 
+      {/* Floating Social Links */}
+      <FloatingSocials />
+
       {/* Hero Section */}
       <section className="relative h-[70vh] bg-gray-900">
         <div className="absolute inset-0">
@@ -142,8 +146,8 @@ const EditBlogPost = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
         </div>
         
-        <div className="relative h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-16">
-          <div className="flex items-center gap-4 text-gray-300 mb-4">
+        <div className="relative h-full max-w-3xl mx-auto px-6 flex flex-col justify-end pb-16">
+          <div className="flex items-center justify-center gap-4 text-gray-300 mb-4">
             <span className="flex items-center gap-2">
               <FiCalendar className="w-4 h-4" />
               {new Date().toLocaleDateString()}
@@ -162,19 +166,19 @@ const EditBlogPost = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="text-4xl md:text-5xl font-bold text-white bg-transparent border-none focus:outline-none focus:ring-0 mb-4"
+            className="text-4xl md:text-5xl font-bold text-white bg-transparent border-none focus:outline-none focus:ring-0 mb-4 text-center"
             placeholder="Enter post title..."
           />
           
           <textarea
             value={excerpt}
             onChange={(e) => setExcerpt(e.target.value)}
-            className="text-xl text-gray-200 bg-transparent border-none focus:outline-none focus:ring-0 resize-none"
+            className="text-xl text-gray-200 bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-center"
             placeholder="Enter post excerpt..."
             rows={2}
           />
 
-          <div className="flex items-center gap-4 mt-8">
+          <div className="flex items-center justify-center gap-4 mt-8">
             <img
               src={post.author.avatar}
               alt={post.author.name}
@@ -189,7 +193,7 @@ const EditBlogPost = () => {
       </section>
 
       {/* Content Section */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
+      <section className="max-w-3xl mx-auto px-6 py-16">
         <div className="prose prose-lg max-w-none">
           {blocks.map((block) => (
             <div
