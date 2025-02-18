@@ -1,5 +1,5 @@
 import { useState, Suspense, useEffect, lazy } from 'react'
-import { FiUsers, FiDollarSign, FiBookOpen, FiTrendingUp, FiActivity, FiClock } from 'react-icons/fi'
+import { FiUsers, FiDollarSign, FiBookOpen, FiTrendingUp, FiActivity, FiClock, FiSearch, FiMenu } from 'react-icons/fi'
 import AdminNav from '../../components/admin/AdminNav'
 import StatsCard from '../../components/admin/StatsCard'
 import UserTable from '../../components/admin/UserTable'
@@ -11,6 +11,7 @@ import { db, auth } from '../../config/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
 import type { UserProfile } from '../../types/profile'
 import type { Enrollment } from '../../types/enrollment'
+import ErrorBoundary from '../../components/common/ErrorBoundary'
 
 // Lazy load heavy components
 const RevenueChart = lazy(() => import('../../components/admin/RevenueChart'))
@@ -23,6 +24,14 @@ const LoadingPlaceholder = () => (
   <div className="animate-pulse bg-gray-200 rounded-xl h-64"></div>
 ) 
 
+interface StatsItem {
+  title: string
+  value: string
+  change: string
+  trend: 'up' | 'down'
+  icon: React.ReactNode
+}
+
 const Dashboard = () => {
   const { stats, logs, isLoading } = useAdmin()
   const { isAdmin } = useAuth()
@@ -31,6 +40,38 @@ const Dashboard = () => {
     enrollments: Enrollment[]
   })[]>([])
   const [timeRange, setTimeRange] = useState('month')
+  const [isNavOpen, setIsNavOpen] = useState(false)
+
+  const statsData: StatsItem[] = [
+    {
+      title: 'Total Students',
+      value: '10,234',
+      change: '+12%',
+      trend: 'up',
+      icon: <FiUsers className="w-6 h-6 text-blue-500" />
+    },
+    {
+      title: 'Active Courses',
+      value: '24',
+      change: '+3',
+      trend: 'up',
+      icon: <FiBookOpen className="w-6 h-6 text-green-500" />
+    },
+    {
+      title: 'Monthly Revenue',
+      value: '$48,234',
+      change: '+22%',
+      trend: 'up',
+      icon: <FiDollarSign className="w-6 h-6 text-purple-500" />
+    },
+    {
+      title: 'Completion Rate',
+      value: '84%',
+      change: '+5%',
+      trend: 'up',
+      icon: <FiTrendingUp className="w-6 h-6 text-orange-500" />
+    }
+  ]
 
   useEffect(() => {
     if (!isAdmin) return
@@ -68,116 +109,52 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AdminNav />
-      
-      <main className="ml-64 p-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome to your admin dashboard</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <StatsCard
-            title="Total Students"
-            value={stats?.totalUsers.toString() || '0'}
-            icon={<FiUsers className="w-6 h-6 text-primary" />}
-          />
-          <StatsCard
-            title="Total Revenue"
-            value={`$${stats?.revenue.toFixed(2) || '0'}`}
-            icon={<FiDollarSign className="w-6 h-6 text-primary" />}
-          />
-          <StatsCard
-            title="Active Programs"
-            value={stats?.totalPrograms.toString() || '0'}
-            icon={<FiBookOpen className="w-6 h-6 text-primary" />}
-          />
-          <StatsCard
-            title="Monthly Growth"
-            value="+12.5%"
-            icon={<FiTrendingUp className="w-6 h-6 text-primary" />}
-          />
-        </div>
-
-        {/* User Management Section */}
-        <div className="bg-white rounded-lg shadow-sm mb-8">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">User Management</h2>
-            <p className="text-sm text-gray-500">Manage your users and their enrollments</p>
-          </div>
-          <UserTable 
-            users={users} 
-            onDeleteUser={deleteUser}
-          />
-        </div>
-
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
-          <div className="space-y-4">
-            {logs.slice(0, 5).map(log => (
-              <div key={log.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
-                <div className="p-2 bg-primary/10 rounded-full">
-                  <FiActivity className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium text-gray-900">
-                      {log.action.replace(/_/g, ' ').toLowerCase()}
-                    </span>
-                    {log.details && `: ${log.details}`}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    <FiClock className="w-3 h-3 inline mr-1" />
-                    {formatDistanceToNow(log.timestamp, { addSuffix: true })}
-                  </p>
-                </div>
-              </div>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50">
+        <AdminNav 
+          isOpen={isNavOpen} 
+          onToggle={() => setIsNavOpen(!isNavOpen)} 
+        />
+        
+        <main className="p-6 pt-20">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {statsData.map((stat, index) => (
+              <StatsCard key={index} {...stat} />
             ))}
           </div>
-        </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <RevenueChart 
-              timeRange={timeRange as 'month' | 'week' | 'year'}
-              setTimeRange={setTimeRange}
-            />
-          </Suspense>
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <DashboardMetric 
-              title="Program Enrollments"
-              data={[]} // Pass enrollment data when ready
-            />
-          </Suspense>
-        </div>
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
+              <h2 className="text-lg font-semibold mb-6">Revenue Overview</h2>
+              <RevenueChart />
+            </div>
 
-        {/* Tables Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <EnrollmentTable />
-          </Suspense>
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <TransactionList />
-          </Suspense>
-        </div>
+            <div className="bg-white rounded-2xl shadow-sm p-6">
+              <h2 className="text-lg font-semibold mb-6">Recent Activity</h2>
+              {/* Activity content */}
+            </div>
+          </div>
 
-        <div className="stats">
-          <div>Total Users: {stats?.totalUsers}</div>
-          <div>Total Programs: {stats?.totalPrograms}</div>
-          <div>Active Enrollments: {stats?.activeEnrollments}</div>
-          <div>Revenue: ${stats?.revenue.toFixed(2)}</div>
-        </div>
-
-        {/* Last Updated */}
-        <div className="text-sm text-gray-500">
-          Last updated: {stats?.lastUpdated.toLocaleString()}
-        </div>
-      </main>
-    </div>
+          {/* User Management */}
+          <div className="bg-white rounded-2xl shadow-sm">
+            <div className="p-6">
+              <h2 className="text-lg font-semibold mb-6">User Management</h2>
+              <div className="max-h-[600px] overflow-y-auto rounded-xl border border-gray-200">
+                <UserTable 
+                  users={[]} 
+                  onDeleteUser={async (id: string) => {
+                    console.log('Delete user:', id)
+                    return true
+                  }} 
+                />
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </ErrorBoundary>
   )
 }
 
